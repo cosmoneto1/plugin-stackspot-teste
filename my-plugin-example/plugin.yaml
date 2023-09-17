@@ -1,0 +1,42 @@
+schema-version: v2
+kind: plugin
+metadata:
+  name: my-plugin-example
+  display-name: my-plugin-example
+  description: Descreva seu plugin explicando o propósito
+  version: 0.0.1
+  picture: plugin.png
+spec:
+  type: app
+  compatibility:
+    - python
+  about: docs/about.md
+  implementation: docs/implementation.md
+  release-notes: docs/release-notes-0.0.1.md
+  requirements: docs/requirements.md
+  technologies: # Ref: https://docs.stackspot.com/content-creator/studio/yaml-files/plugin-yaml/#technologies
+    - Api
+  inputs:
+    - label: Titulo da página HTML
+      name: title
+      type: text
+      required: true
+      default: Treinamento - StackSpot
+      help: "Informe o título da página HTML que será gerada"
+    - label: Texto do h1 no html
+      name: texto
+      type: text
+      required: true
+      default: Meu texto de exemplo no plugin
+      help: "Informe o texto da página HTML que será gerada"
+  hooks:
+    - type: edit
+      trigger: after-render
+      path: index.html
+      changes:
+        - search:
+            string: "</head>"
+            insert-before:
+              snippet: snippets/import-css.txt
+            when:
+              not-exists: "assets/style.css"
